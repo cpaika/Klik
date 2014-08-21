@@ -1,0 +1,209 @@
+<html>
+<head>
+   <script type="text/javascript">
+      var farmerRate, woodRate, stoneRate;
+      var eatRate;
+      var food;
+      var wood ;
+      var stone;
+      var villagers;
+      var totalPeople;
+      var farmer, miner, lumberjack;
+      function iFood()
+	   {
+         changeFood(1);
+         logEvent("Got 1 Food");
+	   }
+      function iWood()
+	   {
+         changeWood(1);
+	   }
+      function iStone()
+	   {
+         changeStone(1);
+	   }
+      function iVillagers(amount)
+      {
+         if(food >= (20*amount))
+         {
+            changeFood(-20*amount);
+            changeVillagers(amount);
+            totalPeople+=amount;
+            document.getElementById("totalValue").innerHTML=totalPeople;
+         }
+         else
+         {
+            log("Not enough food to produce a villager");
+         }
+      }
+      function iFarmer()
+      {
+         if(villagers >= 1)
+         {
+            changeVillagers(-1);
+            changeFarmer(1);
+         }
+         else
+         {
+            log("No Villagers to assign!");
+         }
+      }
+      function iMiner()
+      {
+         if(villagers >= 1)
+         {
+            changeVillagers(-1);
+            changeMiner(1);
+         }
+         else
+         {
+            log("No Villagers to assign!");
+         }
+      }
+      function iLumberjack()
+      {
+         if(villagers >= 1)
+         {
+            changeVillagers(-1);
+            changeLumberjack(1);
+         }
+         else
+         {
+            log("No Villagers to assign!");
+         }
+      }
+      function changeFood(amount)
+      {
+         food += amount;
+         document.getElementById("foodValue").innerHTML=food;
+      }
+      function changeWood(amount)
+      {
+         wood += amount;
+         document.getElementById("woodValue").innerHTML=wood;
+      }
+      function changeStone(amount)
+      {
+         stone += amount;
+         document.getElementById("stoneValue").innerHTML=stone;
+      }
+      /**
+      *  Adds or subtract amount on villager total, depending on whther negative or positive
+      */
+      function changeVillagers(amount)
+      {
+         villagers += amount;
+         document.getElementById("villagersValue").innerHTML=villagers;
+      }
+      function changeFarmer(amount)
+      {
+         farmer += amount;
+         document.getElementById("farmerValue").innerHTML=farmer;
+         log("New farmer created!");
+      }
+      function changeMiner(amount)
+      {
+         miner += amount;
+         document.getElementById("minerValue").innerHTML=miner;
+         log("New Miner created!");
+      }
+      function changeLumberjack(amount)
+      {
+         lumberjack += amount;
+         document.getElementById("lumberjackValue").innerHTML=lumberjack;
+         log("new Lumberjack created!");
+      }
+      /*
+      *Not really random
+      */
+      function killRandom()
+      {
+         log("Killing a random person");
+         if(villagers > 0)
+         {
+            changeVillagers(-1);
+         }
+         else if(miner > 0)
+         {
+            changeMiner(-1);
+         }
+         else if(lumberjack > 0)
+         {
+            changeLumberjack(-1);
+         }
+         else if(farmer > 0)
+         {
+            changeFarmer(-1);
+         }
+      }
+      function kill(people)
+      {
+         if(totalPeople < people)
+         {
+            people = totalPeople;
+         }
+         totalPeople -= people;
+         document.getElementById("totalValue").innerHTML=totalPeople;
+         while( people > 0)
+         {
+            people--;
+            killRandom();
+         }
+      }
+      function tick()
+      {
+         changeFood(farmer*farmerRate - totalPeople*eatRate);
+         changeWood(lumberjack*woodRate);
+         changeStone(miner*stoneRate);
+         if(food <= 0 && totalPeople > 0)
+         {
+            var people = 1;
+            kill(people);
+            food = 0;
+         }
+      }
+      function init()
+      {
+         food = wood = stone = villagers = farmer = miner = lumberjack = totalPeople = 0;
+         food = 50;
+         eatRate = 1;
+         farmerRate = 1.2;
+         woodRate = 1;
+         stoneRate = 1;
+         document.getElementById("foodValue").innerHTML=food;
+         document.getElementById("woodValue").innerHTML=wood;
+         document.getElementById("stoneValue").innerHTML=stone;
+         document.getElementById("villagersValue").innerHTML=villagers;
+         window.setInterval(tick,1000);
+      }
+      function log(string)
+      {
+         document.getElementById("log").innerHTML = string + "<br>" + document.getElementById("log").innerHTML;
+      }
+   </script>
+</head>
+<body onload="init()">
+   <button type="button" id="Food" onclick="iFood();">Increment Food</button>
+   <button type="button" id="Farmer" onclick="iFarmer();">Add Farmer</button>
+   Farmers: <div id="farmerValue"></div>
+   Food: <div id="foodValue"></div>
+   <br>
+   <button type="button" id="Wood" onclick="iWood();">Increment Wood</button>
+   <button type="button" id="Lumberjack" onclick="iLumberjack();">Add Lumberjack</button>
+   Lumberjacks: <div id="lumberjackValue"></div>
+   Wood: <div id="woodValue"></div>
+   <br>
+   <button type="button" id="Stone" onclick="iStone();">Increment Stone</button>
+   <button type="button" id="Miner" onclick="iMiner();">Add Miner</button>
+   Miners: <div id="minerValue"></div>
+   Stone: <div id="stoneValue"></div>
+   <br>
+   <button type="button" id="Villagers1" onclick="iVillagers(1);">Create Villager (20 Food)</button>
+   <button type="button" id="Villagers10" onclick="iVillagers(10);">Create 10 Villagers (200 Food)</button>
+   <button type="button" id="Villagers100" onclick="iVillagers(100);">Create 100 Villager (2000 Food)</button>
+   Villagers: 
+   <div id="villagersValue"></div>
+   Total Population:  <div id="totalValue"></div>
+   <div id="log"></div>
+</body>
+</html>

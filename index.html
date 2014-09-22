@@ -9,6 +9,7 @@
       var villagers;
       var totalPeople;
       var farmer, miner, lumberjack;
+      var populationLimit;
       function iFood()
 	   {
          changeFood(1);
@@ -92,8 +93,15 @@
       */
       function changeVillagers(amount)
       {
-         villagers += amount;
-         document.getElementById("villagersValue").innerHTML=villagers;
+      	 if(villagers + amount <= populationLimit)
+      	 {
+         	villagers += amount;
+         	document.getElementById("villagersValue").innerHTML=villagers;
+         }
+         else
+         {
+         	log("Can't add any more villagers as you've reached the population limit!");
+         }
       }
       function changeFarmer(amount)
       {
@@ -143,7 +151,7 @@
             people = totalPeople;
          }
          totalPeople -= people;
-         document.getElementById("totalValue").innerHTML=totalPeople;
+         document.getElementById("totalValue").innerHTML="Total Population" + totalPeople;
          while( people > 0)
          {
             people--;
@@ -170,6 +178,7 @@
          farmerRate = 1.2;
          woodRate = 1;
          stoneRate = 1;
+         populationLimit = 5;
          document.getElementById("foodValue").innerHTML=food;
          document.getElementById("woodValue").innerHTML=wood;
          document.getElementById("stoneValue").innerHTML=stone;
@@ -203,7 +212,7 @@
    <button type="button" id="Villagers100" onclick="iVillagers(100);">Create 100 Villager (2000 Food)</button>
    Villagers: 
    <div id="villagersValue"></div>
-   Total Population:  <div id="totalValue"></div>
+   <div id="totalValue"></div>
    <div id="log"></div>
 </body>
 </html>

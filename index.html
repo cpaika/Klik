@@ -9,6 +9,7 @@
       var villagers;
       var totalPeople;
       var farmer, miner, lumberjack;
+      var populationLimit;
       function iFood()
 	   {
          changeFood(1);
@@ -92,14 +93,21 @@
       */
       function changeVillagers(amount)
       {
-         villagers += amount;
-         document.getElementById("villagersValue").innerHTML=villagers;
+      	 if(villagers + amount <= populationLimit)
+      	 {
+         	villagers += amount;
+         	document.getElementById("villagersValue").innerHTML=villagers;
+         }
+         else
+         {
+         	log("Can't add any more villagers as you've reached the population limit!");
+         }
       }
       function changeFarmer(amount)
       {
          farmer += amount;
          document.getElementById("farmerValue").innerHTML=farmer;
-         log("New farmer created!");
+         log("New Farmer created!");
       }
       function changeMiner(amount)
       {
@@ -111,7 +119,7 @@
       {
          lumberjack += amount;
          document.getElementById("lumberjackValue").innerHTML=lumberjack;
-         log("new Lumberjack created!");
+         log("New Lumberjack created!");
       }
       /*
       *Not really random
@@ -143,7 +151,7 @@
             people = totalPeople;
          }
          totalPeople -= people;
-         document.getElementById("totalValue").innerHTML=totalPeople;
+         document.getElementById("totalValue").innerHTML="Total Population" + totalPeople;
          while( people > 0)
          {
             people--;
@@ -170,15 +178,17 @@
          farmerRate = 1.2;
          woodRate = 1;
          stoneRate = 1;
+         populationLimit = 5;
          document.getElementById("foodValue").innerHTML=food;
          document.getElementById("woodValue").innerHTML=wood;
          document.getElementById("stoneValue").innerHTML=stone;
-         document.getElementById("villagersValue").innerHTML=villagers;
+         document.getElementById("villagersValue").innerHTML = totalPeople;
+         document.getElementById("totalValue").innerHTML = villagers;
          window.setInterval(tick,1000);
       }
       function log(string)
       {
-         document.getElementById("log").innerHTML = string + "<br>" + document.getElementById("log").innerHTML;
+         document.getElementById("log").innerHTML = "[" + Date.now() + "] " + string + "<br>" + document.getElementById("log").innerHTML;
       }
    </script>
 </head>
@@ -201,9 +211,8 @@
    <button type="button" id="Villagers1" onclick="iVillagers(1);">Create Villager (20 Food)</button>
    <button type="button" id="Villagers10" onclick="iVillagers(10);">Create 10 Villagers (200 Food)</button>
    <button type="button" id="Villagers100" onclick="iVillagers(100);">Create 100 Villager (2000 Food)</button>
-   Villagers: 
-   <div id="villagersValue"></div>
-   Total Population:  <div id="totalValue"></div>
-   <div id="log"></div>
+   <div> Villagers: <span id="villagersValue"></span></div>
+   <div> Unassigned Villagers: <span id="totalValue"></span></span>
+   <div> Events: <div id="log"></div></div>
 </body>
 </html>
